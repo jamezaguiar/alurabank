@@ -1,9 +1,8 @@
 class Negociacao {
-    constructor(data, quantidade, valor) {
-        // Por convenção, usar o _ antes da variável significa que ela não pode ser modificada.
-        this._data = data;
-        this._quantidade = quantidade;
-        this._valor = valor;
+    constructor(_data, _quantidade, _valor) {
+        this._data = _data;
+        this._quantidade = _quantidade;
+        this._valor = _valor;
     }
     // Getters
     get data() {
