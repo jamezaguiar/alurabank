@@ -5,6 +5,7 @@ import { NegociacaoService } from '../services/NegociacaoService';
 import { NegociacoesView, MensagemView } from '../views/index';
 
 import { imprime } from '../helpers/index';
+import { data } from 'jquery';
 
 enum DiaDaSemana {
   Domingo,
