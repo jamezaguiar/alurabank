@@ -1,5 +1,5 @@
 import { domInject } from '../helpers/decorators/index';
-import { Negociacao, Negociacoes } from '../models/index';
+import { Negociacao, NegociacaoParcial, Negociacoes } from '../models/index';
 
 import { NegociacoesView, MensagemView } from '../views/index';
 
@@ -52,6 +52,30 @@ export class NegociacaoController {
 
     this._negociacoesView.update(this._negociacoes);
     this._mensagemView.update('Negociação adicionada com sucesso!');
+  }
+
+  importaDados() {
+    function isOk(res: Response) {
+      if (res.ok) {
+        return res;
+      } else {
+        throw new Error(res.statusText);
+      }
+    }
+
+    fetch('http://localhost:8080/dados')
+      .then((res) => isOk(res))
+      .then((res) => res.json())
+      .then((dados: NegociacaoParcial[]) => {
+        dados
+          .map((dado) => new Negociacao(new Date(), dado.vezes, dado.montante))
+          .forEach((negociacao) => {
+            this._negociacoes.adiciona(negociacao);
+          });
+
+        this._negociacoesView.update(this._negociacoes);
+      })
+      .catch((err) => console.error(err.message));
   }
 
   private _eDiaUtil(data: Date) {
