@@ -1,4 +1,4 @@
-import { domInject } from '../helpers/decorators/index';
+import { domInject, throttle } from '../helpers/decorators/index';
 import { Negociacao, NegociacaoParcial, Negociacoes } from '../models/index';
 
 import { NegociacoesView, MensagemView } from '../views/index';
@@ -32,9 +32,8 @@ export class NegociacaoController {
     this._negociacoesView.update(this._negociacoes);
   }
 
-  adiciona(event: Event) {
-    event.preventDefault();
-
+  @throttle(500)
+  adiciona() {
     const dataDaNegociacao = new Date(this._inputData.val());
     dataDaNegociacao.setDate(dataDaNegociacao.getDate() + 1);
     if (!this._eDiaUtil(dataDaNegociacao)) {
@@ -54,6 +53,7 @@ export class NegociacaoController {
     this._mensagemView.update('Negociação adicionada com sucesso!');
   }
 
+  @throttle(500)
   importaDados() {
     function isOk(res: Response) {
       if (res.ok) {
