@@ -1,7 +1,7 @@
-import { Imprimivel } from './Imprimivel';
+import { IImprimivel } from './IImprimivel';
 import { Negociacao } from './Negociacao';
 
-export class Negociacoes extends Imprimivel {
+export class Negociacoes implements IImprimivel {
   private _negociacoes: Negociacao[] = [];
 
   adiciona(negociacao: Negociacao): void {
