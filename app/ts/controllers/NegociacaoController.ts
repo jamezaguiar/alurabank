@@ -1,5 +1,6 @@
 import { domInject, throttle } from '../helpers/decorators/index';
 import { Negociacao, NegociacaoParcial, Negociacoes } from '../models/index';
+import { NegociacaoService } from '../services/NegociacaoService';
 
 import { NegociacoesView, MensagemView } from '../views/index';
 
@@ -24,6 +25,7 @@ export class NegociacaoController {
   private _inputValor: JQuery;
 
   private _negociacoes = new Negociacoes();
+  private _negociacaoService = new NegociacaoService();
 
   private _negociacoesView = new NegociacoesView('#negociacoesView', true);
   private _mensagemView = new MensagemView('#mensagemView');
@@ -63,19 +65,15 @@ export class NegociacaoController {
       }
     }
 
-    fetch('http://localhost:8080/dados')
-      .then((res) => isOk(res))
-      .then((res) => res.json())
-      .then((dados: NegociacaoParcial[]) => {
-        dados
-          .map((dado) => new Negociacao(new Date(), dado.vezes, dado.montante))
-          .forEach((negociacao) => {
-            this._negociacoes.adiciona(negociacao);
-          });
+    this._negociacaoService
+      .obterNegociacoes(isOk)
+      .then((negociacoes) =>
+        negociacoes.forEach((negociacao) =>
+          this._negociacoes.adiciona(negociacao)
+        )
+      );
 
-        this._negociacoesView.update(this._negociacoes);
-      })
-      .catch((err) => console.error(err.message));
+    this._negociacoesView.update(this._negociacoes);
   }
 
   private _eDiaUtil(data: Date) {
