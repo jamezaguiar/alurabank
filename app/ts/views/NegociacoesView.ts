@@ -23,7 +23,7 @@ export class NegociacoesView extends View<Negociacoes> {
                 `
               <tr>
                 <td>
-                  ${negociacao.data.getDate() + 1}
+                  ${negociacao.data.getDate()}
                   /
                   ${negociacao.data.getMonth() + 1}
                   /
