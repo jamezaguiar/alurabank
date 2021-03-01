@@ -1,8 +1,10 @@
 import { domInject, throttle } from '../helpers/decorators/index';
-import { Negociacao, NegociacaoParcial, Negociacoes } from '../models/index';
+import { Negociacao, Negociacoes } from '../models/index';
 import { NegociacaoService } from '../services/NegociacaoService';
 
 import { NegociacoesView, MensagemView } from '../views/index';
+
+import { imprime } from '../helpers/index';
 
 enum DiaDaSemana {
   Domingo,
@@ -51,6 +53,8 @@ export class NegociacaoController {
 
     this._negociacoes.adiciona(negociacao);
 
+    imprime(negociacao, this._negociacoes);
+
     this._negociacoesView.update(this._negociacoes);
     this._mensagemView.update('Negociação adicionada com sucesso!');
   }
@@ -65,13 +69,13 @@ export class NegociacaoController {
           throw new Error(res.statusText);
         }
       })
-      .then((negociacoes) =>
+      .then((negociacoes) => {
         negociacoes.forEach((negociacao) =>
           this._negociacoes.adiciona(negociacao)
-        )
-      );
+        );
 
-    this._negociacoesView.update(this._negociacoes);
+        this._negociacoesView.update(this._negociacoes);
+      });
   }
 
   private _eDiaUtil(data: Date) {

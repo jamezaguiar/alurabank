@@ -10,7 +10,9 @@ export class NegociacaoService {
           (dado) => new Negociacao(new Date(), dado.vezes, dado.montante)
         )
       )
-      .catch((err) => console.error(err.message));
+      .catch((err) => {
+        console.error(err.message);
+      });
   }
 }
 
