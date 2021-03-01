@@ -1,3 +1,5 @@
+import { logarTempoDeExecucao } from '../helpers/decorators/index';
+
 import { Negociacao, Negociacoes } from '../models/index';
 
 import { NegociacoesView, MensagemView } from '../views/index';
@@ -30,11 +32,13 @@ export class NegociacaoController {
     this._negociacoesView.update(this._negociacoes);
   }
 
+  @logarTempoDeExecucao()
   adiciona(event: Event) {
     event.preventDefault();
 
     const dataDaNegociacao = new Date(this._inputData.val());
-    if (this._eDiaUtil(dataDaNegociacao)) {
+    dataDaNegociacao.setDate(dataDaNegociacao.getDate() + 1);
+    if (!this._eDiaUtil(dataDaNegociacao)) {
       this._mensagemView.update('Somente negociações em dias úteis.');
       return;
     }
@@ -53,8 +57,8 @@ export class NegociacaoController {
 
   private _eDiaUtil(data: Date) {
     return (
-      data.getDay() !== DiaDaSemana.Sabado &&
-      data.getDay() !== DiaDaSemana.Domingo
+      data.getDay() != DiaDaSemana.Sabado &&
+      data.getDay() != DiaDaSemana.Domingo
     );
   }
 }
