@@ -1,7 +1,6 @@
-import { IIgualavel } from './IIgualavel';
-import { IImprimivel } from './IImprimivel';
+import { MeuObjeto } from './MeuObjeto';
 
-export class Negociacao implements IImprimivel, IIgualavel<Negociacao> {
+export class Negociacao implements MeuObjeto<Negociacao> {
   constructor(
     readonly data: Date,
     readonly quantidade: number,
