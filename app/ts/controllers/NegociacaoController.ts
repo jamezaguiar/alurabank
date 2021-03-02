@@ -61,32 +61,33 @@ export class NegociacaoController {
   }
 
   @throttle(500)
-  importaDados() {
-    this._negociacaoService
-      .obterNegociacoes((res: Response) => {
-        if (res.ok) {
-          return res;
-        } else {
-          throw new Error(res.statusText);
+  async importaDados() {
+    try {
+      const negociacoesParaImportar = await this._negociacaoService.obterNegociacoes(
+        (res: Response) => {
+          if (res.ok) {
+            return res;
+          } else {
+            throw new Error(res.statusText);
+          }
         }
-      })
-      .then((negociacoesParaImportar) => {
-        const negociacoesJaImportadas = this._negociacoes.paraArray();
+      );
 
-        negociacoesParaImportar
-          .filter(
-            (negociacao) =>
-              !negociacoesJaImportadas.some((jaImportada) =>
-                negociacao.eIgual(jaImportada)
-              )
-          )
-          .forEach((negociacao) => this._negociacoes.adiciona(negociacao));
+      const negociacoesJaImportadas = this._negociacoes.paraArray();
 
-        this._negociacoesView.update(this._negociacoes);
-      })
-      .catch((err) => {
-        this._mensagemView.update(err.message);
-      });
+      negociacoesParaImportar
+        .filter(
+          (negociacao) =>
+            !negociacoesJaImportadas.some((jaImportada) =>
+              negociacao.eIgual(jaImportada)
+            )
+        )
+        .forEach((negociacao) => this._negociacoes.adiciona(negociacao));
+
+      this._negociacoesView.update(this._negociacoes);
+    } catch (error) {
+      this._mensagemView.update(error.message);
+    }
   }
 
   private _eDiaUtil(data: Date) {
