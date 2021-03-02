@@ -1,6 +1,7 @@
+import { IIgualavel } from './IIgualavel';
 import { IImprimivel } from './IImprimivel';
 
-export class Negociacao implements IImprimivel {
+export class Negociacao implements IImprimivel, IIgualavel<Negociacao> {
   constructor(
     readonly data: Date,
     readonly quantidade: number,
@@ -19,6 +20,14 @@ export class Negociacao implements IImprimivel {
       Valor: ${this.valor},
       Volume: ${this.volume}.
       `
+    );
+  }
+
+  eIgual(negociacao: Negociacao): boolean {
+    return (
+      this.data.getDate() == negociacao.data.getDate() &&
+      this.data.getMonth() == negociacao.data.getMonth() &&
+      this.data.getFullYear() == negociacao.data.getFullYear()
     );
   }
 }
